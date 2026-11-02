@@ -1,8 +1,8 @@
 <?php
-$host     = 'sqlXXX.infinityfree.com'; 
-$dbname   = 'if0_43337554_northwind';  
-$user     = 'if0_43337554';            
-$password = 'รหัสผ่านของคุณ';         
+$host     = 'sql211.infinityfree.com';
+$dbname   = 'if0_43337554_northwind';
+$user     = 'if0_43337554';
+$password = 'DnS155k549gTU';
 
 try {
     $conn = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8mb4", $user, $password, [
