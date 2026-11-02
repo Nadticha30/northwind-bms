@@ -1,12 +1,11 @@
 <?php
-$host     = 'switchback.proxy.rlwy.net';
-$port     = 58555;
-$dbname   = 'railway';
-$user     = 'root';
-$password = 'QEDXiKjuiHriIbRpcvrhAsUPfVECnDBs';
+$host     = 'sqlXXX.infinityfree.com'; 
+$dbname   = 'if0_43337554_northwind';  
+$user     = 'if0_43337554';            
+$password = 'รหัสผ่านของคุณ';         
 
 try {
-    $conn = new PDO("mysql:host=$host;port=$port;dbname=$dbname;charset=utf8mb4", $user, $password, [
+    $conn = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8mb4", $user, $password, [
         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
     ]);
