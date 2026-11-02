@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Northwind BMS - ระบบจัดการคำสั่งซื้อ</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root { --primary-color: #1e293b; }
+        body { background-color: #f8fafc; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .navbar-custom { background-color: var(--primary-color); box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .card-custom { border: none; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
+        .table-custom th { background-color: #f1f5f9; color: #475569; font-weight: 600; text-transform: uppercase; font-size: 0.8rem; border-bottom: 2px solid #e2e8f0; }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom py-3">
+        <div class="container-fluid px-4">
+            <a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="dashboard.html">
+                <i class="fa-solid fa-boxes-stacked text-primary fs-4"></i>
+                <span>NORTHWIND <span class="text-primary">BMS</span></span>
+            </a>
+
+            <div class="d-flex align-items-center gap-2">
+
+                <a href="dashboard.html" class="btn btn-outline-light btn-sm rounded-pill px-3">
+                    <i class="fa-solid fa-house me-1"></i> หน้าหลัก
+                </a>
+
+                <div class="dropdown">
+                    <button class="btn btn-primary btn-sm rounded-pill px-3 dropdown-toggle" type="button" id="mainMenuDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fa-solid fa-bars me-1"></i> เมนูทั้งหมด
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end shadow border-0 py-2 mt-2" aria-labelledby="mainMenuDropdown" style="min-width: 240px; max-height: 480px; overflow-y: auto;">
+                        <li><h6 class="dropdown-header text-uppercase text-muted fw-bold">เมนูระบบทั้ง 12 หน้า</h6></li>
+                        <li><a class="dropdown-item py-2" href="login.html"><i class="fa-solid fa-right-to-bracket me-2 text-secondary"></i>01. เข้าสู่ระบบ (Login)</a></li>
+                        <li><a class="dropdown-item py-2" href="dashboard.html"><i class="fa-solid fa-gauge me-2 text-primary"></i>02. แดชบอร์ด (Dashboard)</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item py-2" href="index.html"><i class="fa-solid fa-box me-2 text-success"></i>03. รายการสินค้า (Products)</a></li>
+                        <li><a class="dropdown-item py-2" href="product_form.html"><i class="fa-solid fa-pen-to-square me-2 text-warning"></i>04. เพิ่ม/แก้ไขสินค้า</a></li>
+                        <li><a class="dropdown-item py-2" href="categories.html"><i class="fa-solid fa-tags me-2 text-info"></i>05. หมวดหมู่สินค้า (Categories)</a></li>
+                        <li><a class="dropdown-item py-2" href="orders.html"><i class="fa-solid fa-receipt me-2 text-danger"></i>06. คำสั่งซื้อ (Orders)</a></li>
+                        <li><a class="dropdown-item py-2" href="order_details.html"><i class="fa-solid fa-list-check me-2 text-secondary"></i>07. รายละเอียดคำสั่งซื้อ</a></li>
+                        <li><a class="dropdown-item py-2" href="customers.html"><i class="fa-solid fa-users me-2 text-primary"></i>08. ลูกค้า (Customers)</a></li>
+                        <li><a class="dropdown-item py-2" href="suppliers.html"><i class="fa-solid fa-truck-field me-2 text-success"></i>09. ผู้จัดจำหน่าย (Suppliers)</a></li>
+                        <li><a class="dropdown-item py-2" href="employees.html"><i class="fa-solid fa-id-badge me-2 text-warning"></i>10. พนักงาน (Employees)</a></li>
+                        <li><a class="dropdown-item py-2" href="shippers.html"><i class="fa-solid fa-truck-fast me-2 text-info"></i>11. บริษัทขนส่ง (Shippers)</a></li>
+                        <li><a class="dropdown-item py-2" href="reports.html"><i class="fa-solid fa-chart-pie me-2 text-danger"></i>12. รายงาน (Reports)</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid px-4 py-4">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
+            <div>
+                <h4 class="fw-bold mb-1 text-dark"><i class="fa-solid fa-receipt text-primary me-2"></i>รายการคำสั่งซื้อ (Orders)</h4>
+                <p class="text-muted small mb-0">จัดการรายการสั่งซื้อ วันที่ทำรายการ และค่าจัดส่ง</p>
+            </div>
+            <div class="d-flex gap-2">
+                <button class="btn btn-outline-secondary btn-sm px-3 rounded-pill" onclick="loadOrders()">
+                    <i class="fa-solid fa-rotate me-1"></i> รีเฟรช
+                </button>
+                <button class="btn btn-primary btn-sm px-3 rounded-pill" onclick="openAddModal()">
+                    <i class="fa-solid fa-plus me-1"></i> เพิ่มคำสั่งซื้อ
+                </button>
+            </div>
+        </div>
+
+        <div class="row g-3 mb-4">
+            <div class="col-12 col-sm-6 col-md-4">
+                <div class="card card-custom p-3 bg-white">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <span class="text-muted small fw-semibold">จำนวนคำสั่งซื้อทั้งหมด</span>
+                            <h3 class="fw-bold my-1" id="total-count">0</h3>
+                        </div>
+                        <div class="bg-primary-subtle text-primary p-3 rounded-circle">
+                            <i class="fa-solid fa-cart-flatbed fs-4"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card card-custom">
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover table-custom align-middle mb-0">
+                        <thead>
+                            <tr>
+                                <th class="text-center" style="width: 100px;">Order ID</th>
+                                <th>รหัสลูกค้า (Customer ID)</th>
+                                <th>รหัสพนักงาน (Employee ID)</th>
+                                <th>วันที่สั่งซื้อ (Order Date)</th>
+                                <th>ค่าจัดส่ง (Freight)</th>
+                                <th class="text-center" style="width: 160px;">จัดการ</th>
+                            </tr>
+                        </thead>
+                        <tbody id="order-list">
+                            <tr><td colspan="6" class="text-center py-5 text-muted">กำลังโหลดข้อมูล...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="orderModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title fw-bold" id="modalTitle">เพิ่มคำสั่งซื้อใหม่</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <form id="orderForm" onsubmit="saveOrder(event)">
+                    <input type="hidden" id="order_id">
+                    <div class="modal-body p-4">
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">รหัสลูกค้า (Customer ID 5 หลัก) <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="customer_id" required maxlength="5" placeholder="เช่น VINET">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">รหัสพนักงาน (Employee ID)</label>
+                            <input type="number" class="form-control" id="employee_id" placeholder="เช่น 5">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">วันที่สั่งซื้อ</label>
+                            <input type="date" class="form-control" id="order_date">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">ค่าจัดส่ง ($)</label>
+                            <input type="number" step="0.01" class="form-control" id="freight" placeholder="0.00">
+                        </div>
+                    </div>
+                    <div class="modal-footer bg-light">
+                        <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">ยกเลิก</button>
+                        <button type="submit" class="btn btn-primary rounded-pill px-4">บันทึกข้อมูล</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let orderModal;
+        let isEditMode = false;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            orderModal = new bootstrap.Modal(document.getElementById('orderModal'));
+            loadOrders();
+        });
+
+        async function loadOrders() {
+            const tbody = document.getElementById('order-list');
+            try {
+                const res = await fetch('api/orders/read.php');
+                const result = await res.json();
+                tbody.innerHTML = '';
+
+                if (result.status && result.data.length > 0) {
+                    document.getElementById('total-count').innerText = result.data.length;
+                    result.data.forEach(item => {
+                        const itemJson = JSON.stringify(item).replace(/'/g, "&apos;");
+                        tbody.innerHTML += `
+                            <tr>
+                                <td class="text-center fw-bold text-secondary">#${item.OrderID}</td>
+                                <td class="fw-semibold text-dark">${item.CustomerID || '-'}</td>
+                                <td>${item.EmployeeID || '-'}</td>
+                                <td>${item.OrderDate || '-'}</td>
+                                <td class="fw-bold text-success">$${parseFloat(item.Freight || 0).toFixed(2)}</td>
+                                <td class="text-center">
+                                    <button class="btn btn-sm btn-outline-warning rounded-3 px-2 py-1" onclick='openEditModal(${itemJson})'><i class="fa-solid fa-pen-to-square"></i> แก้ไข</button>
+                                    <button class="btn btn-sm btn-outline-danger rounded-3 px-2 py-1" onclick="deleteOrder(${item.OrderID})"><i class="fa-solid fa-trash-can"></i> ลบ</button>
+                                </td>
+                            </tr>
+                        `;
+                    });
+                } else {
+                    tbody.innerHTML = '<tr><td colspan="6" class="text-center py-4 text-muted">ไม่พบข้อมูลคำสั่งซื้อ</td></tr>';
+                }
+            } catch(e) {
+                tbody.innerHTML = '<tr><td colspan="6" class="text-center py-4 text-danger">เชื่อมต่อ API ล้มเหลว</td></tr>';
+            }
+        }
+
+        function openAddModal() {
+            isEditMode = false;
+            document.getElementById('orderForm').reset();
+            document.getElementById('order_id').value = '';
+            document.getElementById('modalTitle').innerText = 'เพิ่มคำสั่งซื้อใหม่';
+            orderModal.show();
+        }
+
+        function openEditModal(item) {
+            isEditMode = true;
+            document.getElementById('order_id').value = item.OrderID;
+            document.getElementById('customer_id').value = item.CustomerID || '';
+            document.getElementById('employee_id').value = item.EmployeeID || '';
+            document.getElementById('order_date').value = item.OrderDate || '';
+            document.getElementById('freight').value = item.Freight || 0;
+            document.getElementById('modalTitle').innerText = 'แก้ไขข้อมูลคำสั่งซื้อ';
+            orderModal.show();
+        }
+
+        async function saveOrder(e) {
+            e.preventDefault();
+            const url = isEditMode ? 'api/orders/update.php' : 'api/orders/create.php';
+            const method = isEditMode ? 'PUT' : 'POST';
+
+            const payload = {
+                OrderID: document.getElementById('order_id').value,
+                CustomerID: document.getElementById('customer_id').value,
+                EmployeeID: document.getElementById('employee_id').value,
+                OrderDate: document.getElementById('order_date').value,
+                Freight: document.getElementById('freight').value
+            };
+
+            const res = await fetch(url, {
+                method: method,
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            const result = await res.json();
+
+            if (result.status) {
+                orderModal.hide();
+                loadOrders();
+            } else {
+                alert(result.message);
+            }
+        }
+
+        async function deleteOrder(id) {
+            if (confirm(`ต้องการลบคำสั่งซื้อรหัส ${id} ใช่หรือไม่?`)) {
+                const res = await fetch('api/orders/delete.php', {
+                    method: 'DELETE',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ OrderID: id })
+                });
+                const result = await res.json();
+                if (result.status) loadOrders();
+                else alert(result.message);
+            }
+        }
+    </script>
+</body>
+</html>

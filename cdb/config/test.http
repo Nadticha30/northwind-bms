@@ -1,0 +1,8 @@
+POST http://localhost:2004/api/products/create.php
+Content-Type: application/json
+
+{
+  "ProductName": "Iced Cocoa",
+  "UnitPrice": "45.00",
+  "UnitsInStock": "20"
+}
